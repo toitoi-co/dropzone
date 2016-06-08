@@ -24,6 +24,14 @@
 #
 ###
 
+###
+#
+# Changes to library are made to support the Toitoi project and which are
+# unavailable as parameters in the original library. Specifically, Toitoi's
+# endpoint that interfaces with this library cannot accept multi-part form.
+# This aspect is hardcoded into the original library, warranting this fork.
+#
+###
 
 noop = ->
 
@@ -617,7 +625,7 @@ class Dropzone extends Emitter
 
   init: ->
     # In case it isn't set already
-    @element.setAttribute("enctype", "multipart/form-data") if @element.tagName == "form"
+    # @element.setAttribute("enctype", "multipart/form-data") if @element.tagName == "form"
 
     if @element.classList.contains("dropzone") and !@element.querySelector(".dz-message")
       @element.appendChild Dropzone.createElement """<div class="dz-default dz-message"><span>#{@options.dictDefaultMessage}</span></div>"""
@@ -779,11 +787,12 @@ class Dropzone extends Emitter
 
     fields = Dropzone.createElement fieldsString
     if @element.tagName isnt "FORM"
-      form = Dropzone.createElement("""<form action="#{@options.url}" enctype="multipart/form-data" method="#{@options.method}"></form>""")
+      #form = Dropzone.createElement("""<form action="#{@options.url}" enctype="multipart/form-data" method="#{@options.method}"></form>""")
+      form = Dropzone.createElement("""<form action="#{@options.url}" method="#{@options.method}"></form>""")
       form.appendChild fields
     else
       # Make sure that the enctype and method attributes are set properly
-      @element.setAttribute "enctype", "multipart/form-data"
+      # @element.setAttribute "enctype", "multipart/form-data"
       @element.setAttribute "method", @options.method
     form ? fields
 
@@ -1247,7 +1256,8 @@ class Dropzone extends Emitter
     @submitRequest xhr, formData, files
 
   submitRequest: (xhr, formData, files) ->
-    xhr.send formData
+    # xhr.send formData
+    xhr.send files[0]
 
   # Called internally when processing is finished.
   # Individual callbacks have to be called in the appropriate sections.

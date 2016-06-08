@@ -37,6 +37,16 @@
  *
  */
 
+
+/*
+ *
+ * Changes to library are made to support the Toitoi project and which are
+ * unavailable as parameters in the original library. Specifically, Toitoi's
+ * endpoint that interfaces with this library cannot accept multi-part form.
+ * This aspect is hardcoded into the original library, warranting this fork.
+ *
+ */
+
 (function() {
   var Dropzone, Emitter, camelize, contentLoaded, detectVerticalSquash, drawImageIOSFix, noop, without,
     __slice = [].slice,
@@ -272,7 +282,7 @@
           _ref = file.previewElement.querySelectorAll("[data-dz-name]");
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             node = _ref[_i];
-            node.textContent = this._renameFilename(file.name);
+            node.textContent = this._renameFilename(file.name, file);
           }
           _ref1 = file.previewElement.querySelectorAll("[data-dz-size]");
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -545,9 +555,6 @@
 
     Dropzone.prototype.init = function() {
       var eventName, noPropagation, setupHiddenFileInput, _i, _len, _ref, _ref1;
-      if (this.element.tagName === "form") {
-        this.element.setAttribute("enctype", "multipart/form-data");
-      }
       if (this.element.classList.contains("dropzone") && !this.element.querySelector(".dz-message")) {
         this.element.appendChild(Dropzone.createElement("<div class=\"dz-default dz-message\"><span>" + this.options.dictDefaultMessage + "</span></div>"));
       }
@@ -733,11 +740,11 @@
       }
     };
 
-    Dropzone.prototype._renameFilename = function(name) {
+    Dropzone.prototype._renameFilename = function(name, file) {
       if (typeof this.options.renameFilename !== "function") {
         return name;
       }
-      return this.options.renameFilename(name);
+      return this.options.renameFilename(name, file);
     };
 
     Dropzone.prototype.getFallbackForm = function() {
@@ -752,10 +759,9 @@
       fieldsString += "<input type=\"file\" name=\"" + (this._getParamName(0)) + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : void 0) + " /><input type=\"submit\" value=\"Upload!\"></div>";
       fields = Dropzone.createElement(fieldsString);
       if (this.element.tagName !== "FORM") {
-        form = Dropzone.createElement("<form action=\"" + this.options.url + "\" enctype=\"multipart/form-data\" method=\"" + this.options.method + "\"></form>");
+        form = Dropzone.createElement("<form action=\"" + this.options.url + "\" method=\"" + this.options.method + "\"></form>");
         form.appendChild(fields);
       } else {
-        this.element.setAttribute("enctype", "multipart/form-data");
         this.element.setAttribute("method", this.options.method);
       }
       return form != null ? form : fields;
@@ -1389,13 +1395,13 @@
         }
       }
       for (i = _m = 0, _ref5 = files.length - 1; 0 <= _ref5 ? _m <= _ref5 : _m >= _ref5; i = 0 <= _ref5 ? ++_m : --_m) {
-        formData.append(this._getParamName(i), files[i], this._renameFilename(files[i].name));
+        formData.append(this._getParamName(i), files[i], this._renameFilename(files[i].name, files[i]));
       }
       return this.submitRequest(xhr, formData, files);
     };
 
     Dropzone.prototype.submitRequest = function(xhr, formData, files) {
-      return xhr.send(formData);
+      return xhr.send(files[0]);
     };
 
     Dropzone.prototype._finished = function(files, responseText, e) {
