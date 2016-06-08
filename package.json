@@ -1,14 +1,14 @@
 {
-  "name": "dropzone",
+  "name": "toitoi-dropzone",
   "version": "4.3.0",
-  "description": "Handles drag and drop of files for you.",
+  "description": "Fork of Dropzone to accommodate binary-only, non-multipart accepting endpoints",
   "keywords": [
     "dragndrop",
     "drag and drop",
     "file upload",
     "upload"
   ],
-  "homepage": "http://www.dropzonejs.com",
+  "homepage": "https://github.com/toitoi-co/toitoi-dropzone",
   "main": "./dist/dropzone.js",
   "maintainers": [
     {
@@ -22,14 +22,18 @@
       "name": "Matias Meno",
       "email": "m@tias.me",
       "web": "http://www.matiasmeno.com"
+    },
+    {
+      "name": "Victor Chan",
+      "email": "hello@fivetwelve.ca",
+      "web": "http://fivetwelve.ca"
     }
   ],
   "scripts": {
     "test": "./test.sh"
   },
   "bugs": {
-    "email": "m@tias.me",
-    "url": "https://github.com/enyo/dropzone/issues"
+    "url": "https://github.com/toitoi-co/toitoi-dropzone/issues"
   },
   "licenses": [
     {
@@ -39,7 +43,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/enyo/dropzone.git"
+    "url": "https://github.com/toitoi-co/toitoi-dropzone"
   },
   "dependencies": {},
   "devDependencies": {
